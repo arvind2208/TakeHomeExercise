@@ -9,7 +9,7 @@ namespace API.Repositories.Entities
         public string Street { get; set; }
         public string Suburb { get; set; }
         public string State { get; set; }
-        public int Postcode { get; set; }
+        public int? Postcode { get; set; }
         public CategoryType CategoryType { get; set; }
         public StatusType StatusType { get; set; }
         public string DisplayPrice { get; set; }

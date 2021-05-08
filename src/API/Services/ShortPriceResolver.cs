@@ -13,6 +13,9 @@ namespace API.Services
     {
         public string Resolve(Listing source, Item destination, string destMember, ResolutionContext context)
         {
+            if (string.IsNullOrEmpty(source.DisplayPrice))
+                return null;
+
             string shortPrice = source.DisplayPrice;
 
             var pattern = @"(\d,{0,4})+";
@@ -44,11 +47,12 @@ namespace API.Services
             return shortPrice;
         }
 
-        private static string ConvertToShortPrice(string shortPrice, string displayPrice, decimal dp, long numberGroup, string suffix)
+        private string ConvertToShortPrice(string shortPrice, string displayPrice, decimal dp, long numberGroup, string suffix)
         {
             var spNum = dp / numberGroup;
 
-            var val = spNum % 1 == 0 ? spNum : Math.Round(spNum, 2);
+            var val = spNum % 1 == 0 ? 
+                spNum : Math.Round(spNum, 2);
 
             var sp = $"{val}{suffix}";
 

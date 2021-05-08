@@ -145,12 +145,15 @@ Handled other scenarios like numbers within text, rounding offs, for sale etc.
 
 ## `Task-04`: Tests
 
-_Status: `Pending`_
+_Status: `Completed`_
 
 It is expected that you write tests for important changes you made above on the previous tasks, if any test was relevant. As a last pass, please check any code, existing or new that would benefit from tests and write them. Explain below the benefits of the tests you wrote and why they are important.
 
 ```
-Add comments here
+Added tests to verify different displayPrice formats for shortPrice. This is to ensure shortPrice works for different patterns
+Added tests to verify different combinations of optional parameters (categoryType, statusType, take, skip, suburb)
+Added tests to test cache hit and cache miss
+Added tests for the service to ensure valid and exception cases are working
 ```
 
 ---

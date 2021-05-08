@@ -36,7 +36,7 @@ namespace API.Repositories
 
                 _logger.LogInformation($"Retrieving results from database key : {key}");
 
-                return _dbContext.Listings.Where(x => request.Suburb == null || x.Suburb == request.Suburb).ToListAsync();
+                return _dbContext.Listings.Where(x => request.Suburb == null || x.Suburb.ToLower() == request.Suburb.ToLower()).ToListAsync();
             });
 
             var results = resultsBySuburb.Where(x => (request.CategoryType == null || x.CategoryType == request.CategoryType)

@@ -48,7 +48,7 @@ An example of the expected information in a comments section could be:
 
 ## `Task-01`: Create an API endpoint to return paged listings
 
-_Status: `Pending`_
+_Status: `Completed`_
 
 Create an API endpoint that returns paged listings from the sample DB, given the following (optional) filters:
 
@@ -81,14 +81,18 @@ The returned JSON should look like:
 ```
 
 ```
-Add comments here
+Created endpoint to get listings with the above optional filters.
+Created models, service classes, entities and repositories
+Made an assumption to take/skip only if the value is greater than 0. In read world, I wouldn't normally return all records if there is no default.
+Dependency injected all dependencies
+
 ```
 
 ---
 
 ## `Task-02`: Add caching by suburb
 
-_Status: `Pending`_
+_Status: `Completed`_
 
 A common use case for listings is returning current listings of a given type in a suburb. Because of this, we would like some basic caching adding to avoid the trip to the DB.
 
@@ -101,7 +105,8 @@ Please add this caching functionality, so that the following behavior occurs:
 5. `GET: /listings?suburb=Southbank&categoryType=Rental&take=5` -> cache HIT
 
 ```
-Add comments here
+Added simple in-memory caching to cache by the request payload and return from cache if same call happens within the sliding expiration window
+Set sliding expiration to 5 seconds for the purposes of this exercise.
 ```
 
 ---

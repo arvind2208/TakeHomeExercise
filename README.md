@@ -113,7 +113,7 @@ Set sliding expiration to 5 seconds for the purposes of this exercise.
 
 ## `Task-03`: Add a new property shortPrice
 
-_Status: `Pending`_
+_Status: `Completed`_
 
 We would like a new prop added to the payload:
 ```
@@ -137,7 +137,8 @@ Minimum scenarios to handle:
 Bonus points for handling other scenarios (use your judgement as to what the value should be)
 
 ```
-Add comments here
+Added an automapper resolver to resolve display price to short price
+Handled other scenarios like numbers within text, rounding offs, for sale etc. 
 ```
 
 ---

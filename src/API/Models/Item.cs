@@ -7,6 +7,7 @@ namespace API.Models
         public string CategoryType { get; set; }
         public string StatusType { get; set; }
         public string DisplayPrice { get; set; }
+        public string ShortPrice { get; set; }
         public string Title { get; set; }
     }
 }

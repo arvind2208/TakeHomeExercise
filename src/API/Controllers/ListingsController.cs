@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using API.Extensions;
 using API.Models;
 using API.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -23,7 +24,7 @@ namespace API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetListingsAsync([FromQuery] GetListingsRequest request)
         {
-            _logger.LogInformation($"Getting Listing for payload : {JsonConvert.SerializeObject(request)}");
+            _logger.LogInformation($"Getting Listing for payload : {request.ToJson()}");
 
             var response = await _getListingsService.ExecuteAsync(request);
             return Ok(response);

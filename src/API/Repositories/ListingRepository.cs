@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using API.Models;
 using API.Repositories.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 
 namespace API.Repositories
@@ -12,30 +13,44 @@ namespace API.Repositories
     public class ListingRepository : IListingRepository
     {
         private readonly ApplicationDbContext _dbContext;
+        private readonly IMemoryCache _cache;
         private readonly ILogger<ListingRepository> _logger;
 
-        public ListingRepository(ApplicationDbContext dbContext, ILogger<ListingRepository> logger)
+        private const int ExpirationTimeInSeconds = 5;
+
+        public ListingRepository(ApplicationDbContext dbContext, IMemoryCache cache, ILogger<ListingRepository> logger)
         {
             _dbContext = dbContext;
+            _cache = cache;
             _logger = logger;
         }
 
         public async Task<IEnumerable<Listing>> GetListingsAsync(GetListingsRequest request)
         {
-            var query = await Task.Run(() =>_dbContext.Listings.Where(x => 
-                                           (string.IsNullOrEmpty(request.Suburb) || x.Suburb == request.Suburb)
-                                        && (request.CategoryType == null || x.CategoryType == request.CategoryType)
-                                        && (request.StatusType == null || x.StatusType == request.StatusType)));
+            string key = request.Suburb?.ToLower() ?? "all";
+
+            var resultsBySuburb = await _cache.GetOrCreateAsync(key, entry =>
+            {
+                entry.SlidingExpiration = TimeSpan.FromSeconds(ExpirationTimeInSeconds);
+                entry.AbsoluteExpiration = DateTimeOffset.UtcNow.AddSeconds(ExpirationTimeInSeconds);
+
+                _logger.LogInformation($"Retrieving results from database key : {key}");
+
+                return _dbContext.Listings.Where(x => request.Suburb == null || x.Suburb == request.Suburb).ToListAsync();
+            });
+
+            var results = resultsBySuburb.Where(x => (request.CategoryType == null || x.CategoryType == request.CategoryType)
+                                        && (request.StatusType == null || x.StatusType == request.StatusType));
 
             if (request.Skip > 0)
-                query.Skip(request.Skip);
+                results = results.Skip(request.Skip);
 
             if (request.Take > 0)
-                query.Take(request.Take);
+                results = results.Take(request.Take);
 
-            _logger.LogInformation($"{query.Count()} retrieved");
+            _logger.LogInformation($"{results.Count()} retrieved");
 
-            return query;
+            return results;
         }
     }
 }

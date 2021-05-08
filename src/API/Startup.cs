@@ -27,7 +27,8 @@ namespace API
             services
                 .AddScoped<IListingRepository, ListingRepository>()
                 .AddScoped<IGetListingsService, GetListingsService>()
-                .AddHttpContextAccessor().AddAutoMapper(typeof(Startup));
+                .AddHttpContextAccessor().AddAutoMapper(typeof(Startup))
+                .AddMemoryCache();
 
             services.AddDbContext<ApplicationDbContext>(options =>
             {
